@@ -20,6 +20,7 @@ class CreateCodesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('invite_id')->nullable();
             $table->foreign('invite_id')->references('id')->on('invites');
+            $table->integer('foruser_id')->nullable();
 
             -code
             -user_id
