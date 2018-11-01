@@ -11,10 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
+Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
+Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::middleware(['auth'])->group(function () {
+  Route::get('/home', 'WebController@index')->name('home');
+  Route::get('/', 'WebController@index');
+  Route::post('/invite', 'WebController@invite')->name('invite');
+  Route::get('/code/{id}', 'WebController@code')->name('code');
+});
+Route::get('/taggea/{id}', 'WebController@taggea')->name('taggea');
+Route::get('/politicas', 'WebController@politicas')->name('politicas');

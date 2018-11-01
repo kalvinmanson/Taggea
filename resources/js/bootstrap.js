@@ -12,6 +12,7 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
+    require('@fancyapps/fancybox/dist/jquery.fancybox.min');
 } catch (e) {}
 
 /**
@@ -54,3 +55,20 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+$(function() {
+  $('[data-fancybox="gallery"]').fancybox({});
+  //load popup
+  if($(".loadCode").length > 0) {
+    $.fancybox.open({
+    	src  : '/code/'+ $(".loadCode").data('code'),
+    	type : 'ajax',
+    	opts : {
+    		afterShow : function( instance, current ) {
+    			console.info( 'done!' );
+    		}
+    	}
+    });
+  }
+
+});
