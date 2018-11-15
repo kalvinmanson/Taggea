@@ -3,7 +3,7 @@
     <GmapMarker
       :key="index"
       v-for="(place, index) in placesList"
-      :position="{ lat: place.lat, lng: place.lng}"
+      :position="{ lat: Number(place.lat), lng: Number(place.lng)}"
       :clickable="true"
       @click="toggleInfoWindow(place,index)"
     />
@@ -37,15 +37,16 @@
       mounted() {
         this.getLocation();
         this.placesList = this.places;
+        console.log(this.places);
       },
       methods: {
         onBlur() {
           //console.log(editor);
         },
         getLocation() {
-          let geo = 0;
           if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
+              console.log(position);
               this.centerMap = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
@@ -58,7 +59,7 @@
         },
         toggleInfoWindow: function(marker, idx) {
           console.log(marker)
-          this.infoWindowPos = {lat: marker.lat, lng: marker.lng};
+          this.infoWindowPos = {lat: Number(marker.lat), lng: Number(marker.lng)};
           this.infoContent = '<h3>'+marker.name+'</h3>'+marker.address;
           //check if its the same marker that was selected if yes toggle
           if (this.currentMidx == idx) {

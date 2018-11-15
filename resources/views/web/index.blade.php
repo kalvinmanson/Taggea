@@ -50,12 +50,17 @@
           </div>
         </div>
       </div>
+      @if(Auth::user()->places->count() > 0)
+        @include('partials.admin')
+      @endif
       <h3 class="text-center text-secondary py-3 roboto">Mis taggeadas</h3>
       <div class="card-columns">
         @foreach(Auth::user()->invites as $invite)
           <a data-fancybox data-type="ajax" class="card" data-src="/code/{{ $invite->id }}" href="javascript:;">
             <div class="card-body text-secondary">
-              <img src="{{ $invite->user->avatar }}" class="float-left mr-2 mb-2" width="50">
+              @if($invite->user->avatar)
+                <img src="{{ $invite->user->avatar }}" class="float-left mr-2 mb-2" width="50">
+              @endif
               <strong>{{ $invite->user->name }}</strong> te ha invitado a un <strong>2x1</strong> en Churrisimo.
             </div>
           </a>
@@ -63,7 +68,9 @@
         @foreach(Auth::user()->codes as $code)
           <a data-fancybox data-type="ajax" class="card" data-src="/code/{{ $code->id }}" href="javascript:;">
             <div class="card-body bg-warning text-white">
-              <img src="{{ $code->user->avatar }}" class="float-left mr-2 mb-2" width="50">
+              @if($code->user->avatar)
+                <img src="{{ $code->user->avatar }}" class="float-left mr-2 mb-2" width="50">
+              @endif
               Has invitado a <strong>{{ $code->name }}</strong> para <strong>2x1</strong> en Churrisimo.
               @if(!$code->active)
                 <br><small>Pero aun no ha visto tu invitación.</small>

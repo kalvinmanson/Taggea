@@ -8,6 +8,7 @@ use Image;
 use App\User;
 use App\Code;
 use Auth;
+use Mail;
 
 class WebController extends Controller
 {
@@ -17,6 +18,7 @@ class WebController extends Controller
       $autoCode = Code::where('id', $request->code)->where('user_id', Auth::user()->id)->first();
     }
     $activateCodes = Code::where('email', Auth::user()->email)->where('active', false)->get();
+    //dd($activateCodes);
     foreach($activateCodes as $activeCode) {
       $activeCode->active = true;
       $activeCode->save();
@@ -28,7 +30,7 @@ class WebController extends Controller
     //valida code
     $valCode = Code::where('email', $request->email)->where('user_id', Auth::user()->id)->first();
     if($valCode || $request->email == Auth::user()->email) {
-      dd('error');
+      return redirect()->route('home');
     }
     $code = new Code;
     $code->user_id = Auth::user()->id;
@@ -39,8 +41,10 @@ class WebController extends Controller
 
     // create Image from file
     $img = Image::make('uploads/tag.jpg');
-    $img->insert(Auth::user()->avatar, 'center-top', 0, 420);
-    $img->text('Gustavo Barragan', 550, 540, function($font) {
+    if(!empty(Auth::user()->avatar)) {
+      $img->insert(Auth::user()->avatar, 'center-top', 0, 420);
+    }
+    $img->text(Auth::user()->name, 550, 540, function($font) {
         $font->file('uploads/roboto.ttf');
         $font->size(50);
         $font->color('#808080');
@@ -72,5 +76,18 @@ class WebController extends Controller
   }
   public function politicas() {
     return view('web.politicas');
+  }
+  public function redimir(Request $request) {
+    $code = Code::where('code', $request->code)->first();
+    if(!$code) { $response = 'Codigo no existe'; }
+    elseif($code->active == false) { $response = 'Codigo ya aun no ha sido confirmado'; }
+    elseif($code->redimed_place_id > 0) { $response = 'Codigo ya fue redimido'; }
+    else {
+      $code->redimed_place_id = $request->redimed_place_id;
+      $code->redimed_at = date('Y-m-d H:i:s');
+      $code->save();
+      $response = 'Redimido correctamente';
+    }
+    return view('web.redime', compact('code', 'response'));
   }
 }

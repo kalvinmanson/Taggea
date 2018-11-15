@@ -10,4 +10,8 @@ class Place extends Model
   {
     return $this->belongsTo('App\User');
   }
+  public function codes()
+  {
+    return $this->hasMany('App\Code', 'redimed_place_id');
+  }
 }

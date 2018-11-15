@@ -6,9 +6,9 @@
       <h4 class="roboto">Acércate junto a:</h4>
       <h2 class="roboto text-white">
         @if($code->email == Auth::user()->email)
-          {{ $code->name }}
-        @else
           {{ $code->user->name }}
+        @else
+          {{ $code->name }}
         @endif
       </h2>
       <h4 class="roboto">a uno de nuestros locales con el siguiente código: </h4>
@@ -17,7 +17,7 @@
       <h4 class="roboto">Ya tienes medio codigo</h4>
       <h1>2x1</h1>
       <h4>Taggea a <strong>{{ $code->name }}</strong> en una publicación, para obtener la otra mitad.</h4>
-      <a href="#" class="btn btn-lg btn-primary my-4"><i class="fab fa-facebook"></i> compartir y Taggear</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftaggeatuchurro.com/taggea/{{ $code->id }}" target="_blank" class="btn btn-lg btn-primary my-4"><i class="fab fa-facebook"></i> compartir y Taggear</a>
       <h2 class="roboto text-white"><span class="fz-20">{{ substr($code->code, 0, 3) }}XXX</span></h2>
       <h4 class="txt-white">Cuando <strong>{{ $code->name }}</strong> acepte tendras el resto del código.</h4>
     @endif

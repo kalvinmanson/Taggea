@@ -12,8 +12,8 @@
 */
 
 Auth::routes();
-Route::get('login/facebook', 'Auth\LoginController@redirectToProvider');
-Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
 
 
@@ -22,6 +22,8 @@ Route::middleware(['auth'])->group(function () {
   Route::get('/', 'WebController@index');
   Route::post('/invite', 'WebController@invite')->name('invite');
   Route::get('/code/{id}', 'WebController@code')->name('code');
+  Route::post('/redimir', 'WebController@redimir')->name('redimir');
+
 });
 Route::get('/taggea/{id}', 'WebController@taggea')->name('taggea');
 Route::get('/politicas', 'WebController@politicas')->name('politicas');
