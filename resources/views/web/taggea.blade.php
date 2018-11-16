@@ -20,7 +20,27 @@
         <strong>{{ $code->user->name }} te ha invitado</strong><br>
          Ingresa con tu cuenta, acepta la invitación a devorar churros al <strong>2 x 1</strong>, y demuéstrale que eres todo un Churrísimo.
       </p>
-      <a href="/login/facebook" class="btn btn-lg btn-fb"><i class="fab fa-facebook"></i> Ingresa con Facebook</a>
+      @if(Auth::check())
+        @if($code->active == true)
+        <div class="text-center m-4" style="background-color: #F2BA2B;">
+          <img src="https://taggeatuchurro.com/img/code01.png" class="img-fluid">
+            <h2 class="text-white">
+              @if($code->email == Auth::user()->email)
+                {{ $code->user->name }}
+              @else
+                {{ $code->name }}
+              @endif
+            </h2>
+          <img src="https://taggeatuchurro.com/img/code02.png" class="img-fluid">
+            <h1 class="text-white">{{ $code->code }}</h1>
+          <img src="https://taggeatuchurro.com/img/code03.png" class="img-fluid">
+        </div>
+        @endif
+      @else
+        <a href="/login/facebook" class="btn btn-lg btn-fb"><i class="fab fa-facebook"></i> Ingresa con Facebook</a> &nbsp;
+        <a href="/login/google" class="btn btn-lg btn-fb btn-out-line-danger"><i class="fab fa-google"></i> Ingresa con Google</a>
+      @endif
+
     </div>
   </div>
 </div>

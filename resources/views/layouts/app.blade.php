@@ -10,8 +10,20 @@
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129291739-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-129291739-1');
+  </script>
   <div id="app">
     <main class="py-4">
+      <div class="container">
+        @include('flash::message')
+      </div>
       @yield('content')
     </main>
     <footer class="text-center">

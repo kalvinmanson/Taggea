@@ -22,6 +22,12 @@ class WebController extends Controller
     foreach($activateCodes as $activeCode) {
       $activeCode->active = true;
       $activeCode->save();
+      $code = $activeCode;
+      Mail::send('emails.code', ['code' => $code], function ($m) use ($code) {
+        $m->from('invitacion@tuchurrisimo.com', 'Tu Churrisimo');
+        $m->to($code->email, $code->name)->subject('Este es tu código para ir a devorar churros.');
+        $m->cc($code->user->email, $code->user->name);
+      });
     }
     return view('web.index', compact('autoCode'));
   }
@@ -79,15 +85,21 @@ class WebController extends Controller
   }
   public function redimir(Request $request) {
     $code = Code::where('code', $request->code)->first();
-    if(!$code) { $response = 'Codigo no existe'; }
-    elseif($code->active == false) { $response = 'Codigo ya aun no ha sido confirmado'; }
-    elseif($code->redimed_place_id > 0) { $response = 'Codigo ya fue redimido'; }
+    if(!$code) {
+      flash('El código no existe,')->error();
+    }
+    elseif($code->active == false) {
+      flash('El codigo aun no ha sido activado,')->error();
+    }
+    elseif($code->redimed_place_id > 0) {
+      flash('Código ya fue redimido,')->error();
+    }
     else {
       $code->redimed_place_id = $request->redimed_place_id;
       $code->redimed_at = date('Y-m-d H:i:s');
       $code->save();
-      $response = 'Redimido correctamente';
+      flash('Redimido correctamente,')->success();
     }
-    return view('web.redime', compact('code', 'response'));
+    return redirect()->route('home');
   }
 }
